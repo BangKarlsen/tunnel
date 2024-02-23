@@ -20,10 +20,12 @@
     chunky[index + 3] = a;
   };
 
-  const drawTable = chunky => {
+  const drawTable = (time, chunky) => {
+    // console.log(time);
+    const offset = time % 100;
     for (let x = 20; x < width - 40; x++) {
       for (let y = 20; y < height - 40; y++) {
-        const c = [15 + y, 35, 200 - x / 2, 255];
+        const c = [(15 + y + offset) % 255, 35, 200 - x / 2, 255];
         putPixel(x, y, c, chunky);
       }
     }
@@ -31,22 +33,34 @@
 
   const draw = time => {
     const framebuffer = ctx.getImageData(0, 0, width, height);
-    drawTable(framebuffer.data);
+    drawTable(time, framebuffer.data);
     ctx.putImageData(framebuffer, 0, 0);
   };
 
   let start = undefined;
-
   const animate = timestamp => {
     if (!start) start = timestamp;
 
     const interval = timestamp - start;
-    if (interval > 1000) {
+    if (interval > 600) {
       start = timestamp;
       draw(timestamp);
     }
     window.requestAnimationFrame(animate);
   };
 
-  draw(0);
+  const init = () => {
+    const texture = new Image();
+    texture.crossOrigin = 'anonymous';
+    texture.src = './texture.jpg';
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    texture.addEventListener('load', () => {
+      animate(0);
+    });
+  };
+
+  // draw(0);
+  // animate(0);
+  init();
 })();

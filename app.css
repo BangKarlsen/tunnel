@@ -13,3 +13,7 @@ canvas {
     height: 176px;
     width: 320px;
 }
+
+img {
+    display: none;
+}
