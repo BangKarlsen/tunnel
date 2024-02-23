@@ -10,7 +10,7 @@
   const ctx = canvas.getContext('2d');
   const height = 176;
   const width = 320;
-  const imageData = ctx.createImageData(width, height);
+  let texture;
 
   const putPixel = (x, y, [r, g, b, a], chunky) => {
     const index = y * (width * 4) + x * 4;
@@ -21,11 +21,12 @@
   };
 
   const drawTable = (time, chunky) => {
-    // console.log(time);
     const offset = time % 100;
-    for (let x = 20; x < width - 40; x++) {
-      for (let y = 20; y < height - 40; y++) {
-        const c = [(15 + y + offset) % 255, 35, 200 - x / 2, 255];
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        // const c = [(15 + y + offset) % 255, 35, 200 - x / 2, 255];
+        const index = y * (texture.width * 4) + x * 4;
+        const c = [texture.data[index], texture.data[index + 1], texture.data[index + 2], texture.data[index + 3]];
         putPixel(x, y, c, chunky);
       }
     }
@@ -50,12 +51,16 @@
   };
 
   const init = () => {
-    const texture = new Image();
-    texture.crossOrigin = 'anonymous';
-    texture.src = './texture.jpg';
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    texture.addEventListener('load', () => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = './texture.jpg';
+    img.addEventListener('load', () => {
+      const buffer = document.createElement('canvas');
+      const ctx = buffer.getContext('2d');
+      buffer.width = img.width;
+      buffer.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      texture = ctx.getImageData(0, 0, buffer.width, buffer.height);
       animate(0);
     });
   };
