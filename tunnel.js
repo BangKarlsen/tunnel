@@ -23,7 +23,7 @@
   const drawTable = chunky => {
     for (let x = 20; x < width - 40; x++) {
       for (let y = 20; y < height - 40; y++) {
-        const c = [15 + y, 35, 200, 255];
+        const c = [15 + y, 35, 200 - x / 2, 255];
         putPixel(x, y, c, chunky);
       }
     }
@@ -35,7 +35,7 @@
     ctx.putImageData(framebuffer, 0, 0);
   };
 
-  let start = null;
+  let start = undefined;
 
   const animate = timestamp => {
     if (!start) start = timestamp;
