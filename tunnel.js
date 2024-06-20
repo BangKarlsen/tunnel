@@ -14,15 +14,15 @@
   let dist = new Array();
   let angle = new Array();
 
-  const putPixel = (x, y, [r, g, b, a], chunky) => {
+  const putPixel = (x, y, [r, g, b, a], screen) => {
     const index = y * (width * 4) + x * 4;
-    chunky[index] = r;
-    chunky[index + 1] = g;
-    chunky[index + 2] = b;
-    chunky[index + 3] = a;
+    screen[index] = r;
+    screen[index + 1] = g;
+    screen[index + 2] = b;
+    screen[index + 3] = a;
   };
 
-  const drawScreen = (time, chunky) => {
+  const drawScreen = (time, screen) => {
     //calculate the shift values out of the animation value
     // int shiftX = int(texWidth * 1.0 * animation);
     // int shiftY = int(texHeight * 0.25 * animation);
@@ -41,14 +41,14 @@
         }
         const base = texY * (texture.width * 4) + texX * 4;
         const c = [texture.data[base], texture.data[base + 1], texture.data[base + 2], 255];
-        putPixel(x, y, c, chunky);
+        putPixel(x, y, c, screen);
       }
     }
   };
 
   const draw = time => {
     const framebuffer = ctx.getImageData(0, 0, width, height);
-    drawTable(time, framebuffer.data);
+    drawScreen(time, framebuffer.data);
     ctx.putImageData(framebuffer, 0, 0);
   };
 
