@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     margin: 50px;
-    background: rgb(10, 10, 10);
+    background: rgb(100, 100, 100);
 }
 
 canvas {
