@@ -24,24 +24,26 @@
   };
 
   const drawScreen = (time, screen) => {
-    //calculate the shift values out of the animation value
-    // int shiftX = int(texWidth * 1.0 * animation);
-    // int shiftY = int(texHeight * 0.25 * animation);
+    // Calculate the shift values out of the animation value
     const shiftX = texture.width * 0.0001 * time;
-    const shiftY = Math.sin(0.001 * time) * 0.01;
+    const shiftY = 0.01 * time;
 
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
-        // const c = [(15 + y + offset) % 255, 35, 200 - x / 2, 255];
-        // const index = y * (texture.width * 4) + x * 4;
-        // int color = texture[(unsigned int)(distanceTable[y][x] + shiftX)  % texWidth][(unsigned int)(angleTable[y][x] + shiftY) % texHeight];
-        const texX = Math.floor(dist[y * width + x] + shiftX) % texture.width;
-        let texY = Math.floor(angle[y * width + x] + shiftY) % texture.height;
-        while (texY < 0) {
-          texY += texture.height;
+        // Calculate texture coordinates
+        // `u` is distance to center of screen + some scroll
+        // `v` is angle from horizontal
+        const u = Math.floor(dist[y * width + x] + shiftX) % texture.width;
+        let v = Math.floor(angle[y * width + x] + shiftY) % texture.height;
+        while (v < 0) {
+          v += texture.height;
         }
-        const base = texY * (texture.width * 4) + texX * 4;
-        const c = [texture.data[base], texture.data[base + 1], texture.data[base + 2], 255];
+
+        // Sample the texture
+        const base = v * (texture.width * 4) + u * 4;
+        const a = 255 - 255 * (z[y * width + x] / 255);
+        const c = [texture.data[base], texture.data[base + 1], texture.data[base + 2], a];
+
         putPixel(x, y, c, screen);
       }
     }
@@ -66,19 +68,6 @@
   };
 
   const precalc = () => {
-    /*
-      //generate non-linear transformation table
-  for(int y = 0; y < h; y++)
-  for(int x = 0; x < w; x++)
-  {
-    int angle, distance;
-    float ratio = 32.0;
-    distance = int(ratio * texHeight / sqrt((x - w / 2.0) * (x - w / 2.0) + (y - h / 2.0) * (y - h / 2.0))) % texHeight;
-    angle = (unsigned int)(0.5 * texWidth * atan2(y - h / 2.0, x - w / 2.0) / 3.1416);
-    distanceTable[y][x] = distance;
-    angleTable[y][x] = angle;
-  }
-      * */
     const ratio = 32;
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
@@ -113,9 +102,9 @@
       texture = ctx.getImageData(0, 0, buffer.width, buffer.height);
       precalc();
       animate(0);
+      // draw(0);
     });
   };
 
-  // draw(0);
   init();
 })();
