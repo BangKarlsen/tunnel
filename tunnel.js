@@ -7,9 +7,9 @@
 // remake kkowboy???
 (function () {
   const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  const height = 176 * 2;
-  const width = 320 * 2;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true }); // Stay on CPU
+  const height = 176;
+  const width = 320;
   let texture;
   let dist = new Array();
   let angle = new Array();
