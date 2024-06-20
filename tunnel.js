@@ -13,6 +13,7 @@
   let texture;
   let dist = new Array();
   let angle = new Array();
+  let z = new Array();
 
   const putPixel = (x, y, [r, g, b, a], screen) => {
     const index = y * (width * 4) + x * 4;
@@ -86,10 +87,15 @@
           ((ratio * texture.height) /
             Math.sqrt((x - width / 2) * (x - width / 2) + (y - height / 2) * (y - height / 2))) %
           texture.height;
+
         // angle from this pixel to center of screen
         const a = (0.5 * texture.width * Math.atan2(y - height / 2, x - width / 2)) / Math.PI;
+
         dist[y * width + x] = d;
         angle[y * width + x] = a;
+
+        const dz = 4000 / Math.sqrt((x - width / 2) * (x - width / 2) + (y - height / 2) * (y - height / 2));
+        z[y * width + x] = dz;
       }
     }
   };
