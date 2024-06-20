@@ -8,8 +8,8 @@
 (function () {
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
-  const height = 176;
-  const width = 320;
+  const height = 176 * 2;
+  const width = 320 * 2;
   let texture;
   let dist = new Array();
   let angle = new Array();

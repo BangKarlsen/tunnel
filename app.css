@@ -11,8 +11,10 @@ body {
 
 canvas {
     border: 1px solid #ccc;
-    height: 176px;
-    width: 320px;
+    /* height: 176px; */
+    /* width: 320px; */
+    height: 356px;
+    width: 640px;
 }
 
 img {
