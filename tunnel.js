@@ -1,10 +1,3 @@
-// Line drawer
-// tri rasterizer + blending/alpha?
-// hvide tri med orange/lilla/lysgrøn
-// 2d noise vind
-// model interpolate between poses
-// tunnel / cylinder / lut effects
-// remake kkowboy???
 (function () {
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d', { willReadFrequently: true }); // Stay on CPU
