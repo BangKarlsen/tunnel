@@ -92,7 +92,7 @@
   const init = () => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.src = './texture_small.jpg';
+    img.src = './texture.jpg';
     img.addEventListener('load', () => {
       const buffer = document.createElement('canvas');
       const ctx = buffer.getContext('2d');
