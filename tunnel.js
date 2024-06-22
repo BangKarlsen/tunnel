@@ -3,6 +3,8 @@
   const ctx = canvas.getContext('2d', { willReadFrequently: true }); // Stay on CPU
   const height = 176;
   const width = 320;
+  let running = true;
+  let tick = 0;
   let texture;
   let dist = new Array();
   let angle = new Array();
@@ -16,10 +18,10 @@
     screen[index + 3] = a;
   };
 
-  const drawScreen = (time, screen) => {
+  const drawScreen = (tick, screen) => {
     // Calculate the shift values out of the animation value
-    const shiftX = texture.width * 0.0001 * time;
-    const shiftY = 0.01 * time;
+    const shiftX = 0.1 * tick;
+    const shiftY = 0.1 * tick;
 
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
@@ -42,20 +44,16 @@
     }
   };
 
-  const draw = time => {
+  const draw = tick => {
     const framebuffer = ctx.getImageData(0, 0, width, height);
-    drawScreen(time, framebuffer.data);
+    drawScreen(tick, framebuffer.data);
     ctx.putImageData(framebuffer, 0, 0);
   };
 
-  let start = undefined;
-  const animate = timestamp => {
-    if (!start) start = timestamp;
-
-    const interval = timestamp - start;
-    if (interval > 0) {
-      start = timestamp;
-      draw(timestamp);
+  const animate = () => {
+    if (running) {
+      draw(tick);
+      tick++;
     }
     window.requestAnimationFrame(animate);
   };
@@ -100,4 +98,10 @@
   };
 
   init();
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === ' ') {
+      running = !running;
+    }
+  });
 })();
